@@ -1,0 +1,721 @@
+{
+  "id": "00000000-0000-0000-0000-000000000000",
+  "prevId": "",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.books_bookshelf": {
+      "name": "books_bookshelf",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(64)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "books_bookshelf_name_2642cad6_like": {
+          "name": "books_bookshelf_name_2642cad6_like",
+          "columns": [
+            {
+              "expression": "name",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "varchar_pattern_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "books_bookshelf_name_key": {
+          "columns": [
+            "name"
+          ],
+          "nullsNotDistinct": false,
+          "name": "books_bookshelf_name_key"
+        }
+      },
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.books_book": {
+      "name": "books_book",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "download_count": {
+          "name": "download_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "gutenberg_id": {
+          "name": "gutenberg_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "media_type": {
+          "name": "media_type",
+          "type": "varchar(16)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "varchar(1024)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "books_book_gutenberg_id_key": {
+          "columns": [
+            "gutenberg_id"
+          ],
+          "nullsNotDistinct": false,
+          "name": "books_book_gutenberg_id_key"
+        }
+      },
+      "checkConstraints": {
+        "books_book_download_count_check": {
+          "name": "books_book_download_count_check",
+          "value": "download_count >= 0"
+        },
+        "books_book_gutenberg_id_check": {
+          "name": "books_book_gutenberg_id_check",
+          "value": "gutenberg_id >= 0"
+        }
+      },
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.books_book_bookshelves": {
+      "name": "books_book_bookshelves",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "book_id": {
+          "name": "book_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "bookshelf_id": {
+          "name": "bookshelf_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "books_book_bookshelves_0a4572cc": {
+          "name": "books_book_bookshelves_0a4572cc",
+          "columns": [
+            {
+              "expression": "book_id",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "int4_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "books_book_bookshelves_40928700": {
+          "name": "books_book_bookshelves_40928700",
+          "columns": [
+            {
+              "expression": "bookshelf_id",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "int4_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "books_book_bookshel_bookshelf_id_80cc77c5_fk_books_bookshelf_id": {
+          "name": "books_book_bookshel_bookshelf_id_80cc77c5_fk_books_bookshelf_id",
+          "tableFrom": "books_book_bookshelves",
+          "tableTo": "books_bookshelf",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "bookshelf_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "books_book_bookshelves_book_id_f820ff72_fk_books_book_id": {
+          "name": "books_book_bookshelves_book_id_f820ff72_fk_books_book_id",
+          "tableFrom": "books_book_bookshelves",
+          "tableTo": "books_book",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "book_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "books_book_bookshelves_book_id_6016a70a_uniq": {
+          "columns": [
+            "book_id",
+            "bookshelf_id"
+          ],
+          "nullsNotDistinct": false,
+          "name": "books_book_bookshelves_book_id_6016a70a_uniq"
+        }
+      },
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.books_book_languages": {
+      "name": "books_book_languages",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "book_id": {
+          "name": "book_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "language_id": {
+          "name": "language_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "books_book_languages_0a4572cc": {
+          "name": "books_book_languages_0a4572cc",
+          "columns": [
+            {
+              "expression": "book_id",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "int4_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "books_book_languages_468679bd": {
+          "name": "books_book_languages_468679bd",
+          "columns": [
+            {
+              "expression": "language_id",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "int4_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "books_book_languages_book_id_e833b1f4_fk_books_book_id": {
+          "name": "books_book_languages_book_id_e833b1f4_fk_books_book_id",
+          "tableFrom": "books_book_languages",
+          "tableTo": "books_book",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "book_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "books_book_languages_language_id_e9f60572_fk_books_language_id": {
+          "name": "books_book_languages_language_id_e9f60572_fk_books_language_id",
+          "tableFrom": "books_book_languages",
+          "tableTo": "books_language",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "language_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "books_book_languages_book_id_554fdccb_uniq": {
+          "columns": [
+            "book_id",
+            "language_id"
+          ],
+          "nullsNotDistinct": false,
+          "name": "books_book_languages_book_id_554fdccb_uniq"
+        }
+      },
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.books_language": {
+      "name": "books_language",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "code": {
+          "name": "code",
+          "type": "varchar(4)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "books_language_code_217c406c_like": {
+          "name": "books_language_code_217c406c_like",
+          "columns": [
+            {
+              "expression": "code",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "varchar_pattern_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "books_language_code_key": {
+          "columns": [
+            "code"
+          ],
+          "nullsNotDistinct": false,
+          "name": "books_language_code_key"
+        }
+      },
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.books_book_subjects": {
+      "name": "books_book_subjects",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "book_id": {
+          "name": "book_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "subject_id": {
+          "name": "subject_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "books_book_subjects_0a4572cc": {
+          "name": "books_book_subjects_0a4572cc",
+          "columns": [
+            {
+              "expression": "book_id",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "int4_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "books_book_subjects_ffaba1d1": {
+          "name": "books_book_subjects_ffaba1d1",
+          "columns": [
+            {
+              "expression": "subject_id",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "int4_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "books_book_subjects_book_id_a578cff2_fk_books_book_id": {
+          "name": "books_book_subjects_book_id_a578cff2_fk_books_book_id",
+          "tableFrom": "books_book_subjects",
+          "tableTo": "books_book",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "book_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "books_book_subjects_subject_id_7445958f_fk_books_subject_id": {
+          "name": "books_book_subjects_subject_id_7445958f_fk_books_subject_id",
+          "tableFrom": "books_book_subjects",
+          "tableTo": "books_subject",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "subject_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "books_book_subjects_book_id_74dcf64a_uniq": {
+          "columns": [
+            "book_id",
+            "subject_id"
+          ],
+          "nullsNotDistinct": false,
+          "name": "books_book_subjects_book_id_74dcf64a_uniq"
+        }
+      },
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.books_subject": {
+      "name": "books_subject",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.books_format": {
+      "name": "books_format",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "mime_type": {
+          "name": "mime_type",
+          "type": "varchar(32)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "url": {
+          "name": "url",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "book_id": {
+          "name": "book_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "books_format_0a4572cc": {
+          "name": "books_format_0a4572cc",
+          "columns": [
+            {
+              "expression": "book_id",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "int4_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "books_format_book_id_b948fa34_fk_books_book_id": {
+          "name": "books_format_book_id_b948fa34_fk_books_book_id",
+          "tableFrom": "books_format",
+          "tableTo": "books_book",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "book_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.books_author": {
+      "name": "books_author",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "birth_year": {
+          "name": "birth_year",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "death_year": {
+          "name": "death_year",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(128)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.books_book_authors": {
+      "name": "books_book_authors",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "book_id": {
+          "name": "book_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "author_id": {
+          "name": "author_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "books_book_authors_0a4572cc": {
+          "name": "books_book_authors_0a4572cc",
+          "columns": [
+            {
+              "expression": "book_id",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "int4_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "books_book_authors_4f331e2f": {
+          "name": "books_book_authors_4f331e2f",
+          "columns": [
+            {
+              "expression": "author_id",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "int4_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "books_book_authors_author_id_984f1ab8_fk_books_author_id": {
+          "name": "books_book_authors_author_id_984f1ab8_fk_books_author_id",
+          "tableFrom": "books_book_authors",
+          "tableTo": "books_author",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "author_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "books_book_authors_book_id_ed3433e7_fk_books_book_id": {
+          "name": "books_book_authors_book_id_ed3433e7_fk_books_book_id",
+          "tableFrom": "books_book_authors",
+          "tableTo": "books_book",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "book_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "books_book_authors_book_id_8714badb_uniq": {
+          "columns": [
+            "book_id",
+            "author_id"
+          ],
+          "nullsNotDistinct": false,
+          "name": "books_book_authors_book_id_8714badb_uniq"
+        }
+      },
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "tables": {}
+  }
+}

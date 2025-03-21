@@ -1,0 +1,99 @@
+openapi: 3.0.0
+info:
+  title: Gutenberg Books API
+  version: 1.0.0
+  description: API to filter and retrieve books from the Project Gutenberg dataset
+
+paths:
+  /books:
+    get:
+      summary: Retrieve books with optional filters
+      parameters:
+        - name: ids
+          in: query
+          description: Comma-separated list of Project Gutenberg IDs
+          required: false
+          schema:
+            type: string
+        - name: languages
+          in: query
+          description: Comma-separated list of language codes (e.g., en, fr)
+          required: false
+          schema:
+            type: string
+        - name: mime_type
+          in: query
+          description: Comma-separated list of MIME types (e.g., text/plain)
+          required: false
+          schema:
+            type: string
+        - name: topic
+          in: query
+          description: Comma-separated topics (partial match on subject or bookshelf)
+          required: false
+          schema:
+            type: string
+        - name: search
+          in: query
+          description: Partial match in title or author (case-insensitive)
+          required: false
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: Page number (starting from 1)
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A paginated list of books
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                  next:
+                    type: string
+                    nullable: true
+                  previous:
+                    type: string
+                    nullable: true
+                  books:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                        authors:
+                          type: array
+                          items:
+                            type: string
+                        genre:
+                          type: array
+                          items:
+                            type: string
+                        languages:
+                          type: array
+                          items:
+                            type: string
+                        subjects:
+                          type: array
+                          items:
+                            type: string
+                        bookshelves:
+                          type: array
+                          items:
+                            type: string
+                        formats:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              mimeType:
+                                type: string
+                              url:
+                                type: string
