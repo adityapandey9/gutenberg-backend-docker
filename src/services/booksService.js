@@ -7,7 +7,7 @@ import {
   booksLanguage,
   booksFormat,
 } from "../db/drizzle/schema";
-import { and, eq, ilike, inArray, or, sql } from "drizzle-orm";
+import { and, ilike, inArray, or, sql } from "drizzle-orm";
 import { API_ROUTE } from "../config/const.js";
 import { escapeLike, buildPageUrl } from "../utils/utils.js";
 
@@ -18,18 +18,17 @@ export async function getFilteredBooks({
   topics,
   search,
   page,
-  originalQuery
+  originalQuery,
 }) {
-
   if (Number.isInteger(page) && page < 1) {
-    return { detail: "Invalid page."};
+    return { detail: "Invalid page." };
   }
 
   if (!Number.isInteger(page)) {
     page = 1;
   }
-  
-  let limit = 25;  
+
+  let limit = 25;
   const offset = (page - 1) * limit;
 
   // Initial book query
@@ -67,11 +66,15 @@ export async function getFilteredBooks({
   }
 
   if (mimeTypes?.length) {
+    const mimeConditions = mimeTypes.map((mt) =>
+      ilike(booksFormat.mimeType, `%${escapeLike(mt)}%`)
+    );
+
     whereClauses.push(sql`
       EXISTS (
         SELECT 1 FROM books_format
         WHERE books_format.book_id = books_book.id
-        AND ${inArray(booksFormat.mimeType, mimeTypes)}
+        AND ${or(...mimeConditions)}
       )
     `);
   }
@@ -102,7 +105,6 @@ export async function getFilteredBooks({
       )
     `);
   }
-
 
   const books = await db
     .select({

@@ -1,6 +1,6 @@
 {
   "name": "my-project",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "scripts": {
     "start": "NODE_ENV=production bun src/app.js",
     "dev": "NODE_ENV=development nodemon --watch src src/app.js",
